@@ -8,6 +8,7 @@ import { chirp } from "./handlers/validation.js"
 const app = express()
 const PORT = 8080
 
+app.use(express.json())
 app.use(logResponseMiddleware)
 app.use("/app", metricsMiddleware, express.static("./src/app"))
 

@@ -1,27 +1,17 @@
 import { Request, Response } from "express"
+import { jsonResponse } from "./json.js";
 
 
 export const chirp = (req: Request, res: Response) => {
-  let body = ""
+  type parameters = {
+    body: string;
+  }
 
-  req.on("data", (chunk) => {
-    body += chunk;
-  })
+  const params: parameters = req.body
 
-  req.on("end", () => {
-    try {
-      const parsed = JSON.parse(body)
-
-      if (!parsed?.body || typeof parsed?.body !== "string") {
-        res.status(400).send(JSON.stringify({error: "Something went wrong"}))
-      } else if (parsed.body.length > 140) {
-        res.status(400).send(JSON.stringify({error: "Chirp is too long"}))
-      } else {
-        res.send(JSON.stringify({valid: true}))
-      }
-
-    } catch (error) {
-      res.status(400).send("Invalid JSON")
-    }
-  })
+  if (params.body.length > 140) {
+    jsonResponse(res, {error: "Chirp is too long"}, 400)
+  } else {
+    jsonResponse(res, {valid: true})
+  }
 }
