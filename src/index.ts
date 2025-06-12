@@ -4,6 +4,7 @@ import { metricsMiddleware } from "./middleware/metrics.js"
 import { metrics, reset } from "./handlers/admin.js"
 import { health } from "./handlers/health.js"
 import { chirp } from "./handlers/validation.js"
+import { error } from "./middleware/error.js"
 
 const app = express()
 const PORT = 8080
@@ -18,6 +19,8 @@ app.post("/api/validate_chirp", chirp)
 app.get("/admin/metrics", metrics)
 
 app.post("/admin/reset", reset)
+
+app.use(error)
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`)
