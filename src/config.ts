@@ -2,7 +2,8 @@ import type { MigrationConfig } from "drizzle-orm/migrator"
 
 export type APIConfig = {
     defaults: {
-        expiresInSeconds: number;
+        accessTokenExpiresInSeconds: number;
+        refreshTokenExpiresInSeconds: number;
     };
     secret: string;
     platform: string;
@@ -31,7 +32,8 @@ const envOrFail = (key: string): string => {
 
 export const config: APIConfig = {
     defaults: {
-        expiresInSeconds: 3600
+        accessTokenExpiresInSeconds: 3600,
+        refreshTokenExpiresInSeconds: 60 * 3600,
     },
     secret: envOrFail("JWT_SECRET"),
     platform: envOrFail("PLATFORM"),

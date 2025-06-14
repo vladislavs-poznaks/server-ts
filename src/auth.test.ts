@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest"
-import { checkHashedPassword, createJWT, hashPassword, validateJWT, getBearerToken } from "./auth"
+import { checkHashedPassword, makeJWT, hashPassword, validateJWT, getBearerToken } from "./auth"
 import { Request } from 'express';
 import UnauthenticatedError from './errors/UnauthenticatedError';
 
@@ -28,7 +28,7 @@ describe("Password Hashing", () => {
 
   describe("JWT token", () => {
     it("creates a token and validates it", () => {
-        const token = createJWT('test_user_id', 1000, 'secret')
+        const token = makeJWT('test_user_id', 1000, 'secret')
 
         const userId = validateJWT(token, 'secret')
 

@@ -3,6 +3,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
 import UnauthenticatedError from './errors/UnauthenticatedError.js';
 import { Request } from 'express';
+import crypto from 'crypto';
 
 export type Payload = Pick<JwtPayload, "iss" | "sub" | "iat" | "exp">;
 
@@ -16,7 +17,7 @@ export const checkHashedPassword = async (password: string, hash: string): Promi
     return await bcrypt.compare(password, hash)
 }
 
-export const createJWT = (userId: string, expiresIn: number, secret: string): string => {
+export const makeJWT = (userId: string, expiresIn: number, secret: string): string => {
     const now = Math.floor(Date.now() / 1000)
 
     const payload: Payload = {
@@ -27,6 +28,12 @@ export const createJWT = (userId: string, expiresIn: number, secret: string): st
     }
 
     return jwt.sign(payload, secret)
+}
+
+export const makeRefreshToken = () => {
+    const token = crypto.randomBytes(32).toString('hex')
+
+    return token
 }
 
 export const validateJWT = (token: string, secret: string): string => {
@@ -53,4 +60,4 @@ export const getBearerToken = (req: Request): string => {
     }
 
     return token
-} 
+}
