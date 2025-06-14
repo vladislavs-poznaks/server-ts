@@ -6,3 +6,7 @@ export const create = async (user: User) => {
 
   return result
 }
+
+export const truncate = async () => {
+    await db.delete(users)
+}

@@ -1,10 +1,19 @@
 POST http://localhost:8080/admin/reset
 
-###
+### Validate chirp
 
 POST http://localhost:8080/api/validate_chirp
 content-type: application/json
 
 {
   "body": "This is an opinion I need to share with the world"
+}
+
+### Create user
+
+POST http://localhost:8080/api/users
+content-type: application/json
+
+{
+  "email": "test_002@example.com"
 }
