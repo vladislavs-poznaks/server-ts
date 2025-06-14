@@ -14,6 +14,12 @@ export const create = async (user: User) => {
   return result
 }
 
+export const updateUser = async (userId: string, user: User) => {
+  const [result] = await db.update(users).set(user).where(eq(users.id, userId)).returning()
+
+  return result
+}
+
 export const truncate = async () => {
     await db.delete(users)
 }

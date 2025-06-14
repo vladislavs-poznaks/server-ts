@@ -8,7 +8,7 @@ import postgres from "postgres";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { config } from "./config.js"
-import { store as storeUser } from "./handlers/users.js"
+import { store as storeUser, update as updateUser } from "./handlers/users.js"
 import { index as indexChirps, show as showChirp, store as storeChirp } from "./handlers/chirps.js"
 import { login, refresh, revoke } from "./handlers/auth.js"
 
@@ -30,6 +30,8 @@ app.post("/api/refresh", refresh)
 app.post("/api/revoke", revoke)
 
 app.post("/api/users", storeUser)
+app.put("/api/users", updateUser)
+
 app.get("/api/chirps", indexChirps)
 app.get("/api/chirps/:id", showChirp)
 app.post("/api/chirps", storeChirp)
