@@ -11,6 +11,11 @@ content-type: application/json
   "email": "test_001@example.com"
 }
 
+### Index chirps
+
+GET http://localhost:8080/api/chirps
+content-type: application/json
+
 ### Create chirp
 
 POST http://localhost:8080/api/chirps

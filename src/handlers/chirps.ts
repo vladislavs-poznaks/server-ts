@@ -1,9 +1,16 @@
 import { Request, Response } from "express"
-import { create } from "../db/queries/chirps.js";
+import { create, getChirps } from "../db/queries/chirps.js";
 import { jsonResponse } from "./json.js";
 import BadRequestError from "../errors/BadRequestError.js";
+import { HttpHandler } from "./index.js";
 
 const profane = ['kerfuffle', 'sharbert', 'fornax']
+
+export const index: HttpHandler = async (req, res) => {
+  const chirps = await getChirps()
+
+  jsonResponse(res, chirps)
+}
 
 
 export const store = async (req: Request, res: Response) => {
