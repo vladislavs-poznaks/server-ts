@@ -1,8 +1,9 @@
 import { Request, Response } from "express"
-import { create, getChirps } from "../db/queries/chirps.js";
+import { create, getChirpById, getChirps } from "../db/queries/chirps.js";
 import { jsonResponse } from "./json.js";
 import BadRequestError from "../errors/BadRequestError.js";
 import { HttpHandler } from "./index.js";
+import NotFoundError from "../errors/NotFoundError.js";
 
 const profane = ['kerfuffle', 'sharbert', 'fornax']
 
@@ -10,6 +11,18 @@ export const index: HttpHandler = async (req, res) => {
   const chirps = await getChirps()
 
   jsonResponse(res, chirps)
+}
+
+export const show: HttpHandler = async (req, res) => {
+  const id = req.params.id
+
+  const chirp = await getChirpById(id)
+
+  if (! chirp) {
+    throw new NotFoundError(`Chirp ${id} not found`)
+  }
+
+  jsonResponse(res, chirp)
 }
 
 
