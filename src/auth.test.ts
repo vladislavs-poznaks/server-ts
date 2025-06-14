@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeAll } from "vitest"
-import { checkHashedPassword, createJWT, hashPassword, validateJWT } from "./auth"
+import { checkHashedPassword, createJWT, hashPassword, validateJWT, getBearerToken } from "./auth"
+import { Request } from 'express';
+import UnauthenticatedError from './errors/UnauthenticatedError';
 
 describe("Password Hashing", () => {
     const password1 = "correctPassword123!"
@@ -33,3 +35,41 @@ describe("Password Hashing", () => {
         expect(userId).toBe('test_user_id')
     })
   })
+
+describe('getBearerToken', () => {
+    it('should extract token from valid Authorization header', () => {
+        const mockRequest = {
+            get: (header: string) => 'Bearer valid.token.here'
+        } as Request;
+
+        const token = getBearerToken(mockRequest);
+        expect(token).toBe('valid.token.here');
+    });
+
+    it('should throw UnauthenticatedError when Authorization header is missing', () => {
+        const mockRequest = {
+            get: (header: string) => undefined
+        } as Request;
+
+        expect(() => getBearerToken(mockRequest)).toThrow(UnauthenticatedError);
+        expect(() => getBearerToken(mockRequest)).toThrow('Bearer token not present');
+    });
+
+    it('should throw UnauthenticatedError when Authorization header is malformed', () => {
+        const mockRequest = {
+            get: (header: string) => 'Bearer'
+        } as Request;
+
+        expect(() => getBearerToken(mockRequest)).toThrow(UnauthenticatedError);
+        expect(() => getBearerToken(mockRequest)).toThrow('Bearer token not present');
+    });
+
+    it('should throw UnauthenticatedError when token is empty', () => {
+        const mockRequest = {
+            get: (header: string) => 'Bearer '
+        } as Request;
+
+        expect(() => getBearerToken(mockRequest)).toThrow(UnauthenticatedError);
+        expect(() => getBearerToken(mockRequest)).toThrow('Bearer token not present');
+    });
+});

@@ -4,6 +4,8 @@ import { jsonResponse } from "./json.js";
 import BadRequestError from "../errors/BadRequestError.js";
 import { HttpHandler } from "./index.js";
 import NotFoundError from "../errors/NotFoundError.js";
+import { getBearerToken, validateJWT } from "../auth.js";
+import { config } from "../config.js";
 
 const profane = ['kerfuffle', 'sharbert', 'fornax']
 
@@ -29,8 +31,11 @@ export const show: HttpHandler = async (req, res) => {
 export const store = async (req: Request, res: Response) => {
   type parameters = {
     body: string;
-    userId: string;
   }
+
+  const token = getBearerToken(req)
+
+  const userId = validateJWT(token, config.secret)
 
   const params: parameters = req.body
 
@@ -40,7 +45,7 @@ export const store = async (req: Request, res: Response) => {
 
   const cleaned = params.body.split(' ').map(word => profane.includes(word.toLocaleLowerCase()) ? '****' : word).join(' ')
 
-  const chirp = await create({...params, body: cleaned})
+  const chirp = await create({body: cleaned, userId})
 
   jsonResponse(res, chirp, 201)
 }

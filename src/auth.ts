@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
 import { JwtPayload } from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
-import UnauthenticatedError from './errors/UnauthenticatedError';
+import UnauthenticatedError from './errors/UnauthenticatedError.js';
+import { Request } from 'express';
 
 export type Payload = Pick<JwtPayload, "iss" | "sub" | "iat" | "exp">;
 
@@ -37,3 +38,19 @@ export const validateJWT = (token: string, secret: string): string => {
         throw new UnauthenticatedError('Invalid token')
     }
 }
+
+export const getBearerToken = (req: Request): string => {
+    const header = req.get('Authorization')
+
+    if (! header) {
+        throw new UnauthenticatedError('Bearer token not present')
+    }
+
+    const [_, token] = header.split(' ')
+
+    if (! token) {
+        throw new UnauthenticatedError('Bearer token not present')
+    }
+
+    return token
+} 

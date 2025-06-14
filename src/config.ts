@@ -1,6 +1,10 @@
 import type { MigrationConfig } from "drizzle-orm/migrator"
 
 export type APIConfig = {
+    defaults: {
+        expiresInSeconds: number;
+    };
+    secret: string;
     platform: string;
     db: DBConfig;
     fileserverHits: number;
@@ -26,6 +30,10 @@ const envOrFail = (key: string): string => {
 
 
 export const config: APIConfig = {
+    defaults: {
+        expiresInSeconds: 3600
+    },
+    secret: envOrFail("JWT_SECRET"),
     platform: envOrFail("PLATFORM"),
     db: {
         url: envOrFail("DB_URL"),
