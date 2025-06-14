@@ -10,6 +10,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import { config } from "./config.js"
 import { store as storeUser } from "./handlers/users.js"
 import { index as indexChirps, show as showChirp, store as storeChirp } from "./handlers/chirps.js"
+import { login } from "./handlers/auth.js"
 
 
 const client = postgres(config.db.url, { max: 1 });
@@ -23,6 +24,9 @@ app.use(logResponseMiddleware)
 app.use("/app", metricsMiddleware, express.static("./src/app"))
 
 app.get("/api/healthz", health)
+
+app.post("/api/login", login)
+
 app.post("/api/users", storeUser)
 app.get("/api/chirps", indexChirps)
 app.get("/api/chirps/:id", showChirp)
