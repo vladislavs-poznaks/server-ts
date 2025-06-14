@@ -5,6 +5,13 @@ import { metrics, reset } from "./handlers/admin.js"
 import { health } from "./handlers/health.js"
 import { chirp } from "./handlers/validation.js"
 import { error } from "./middleware/error.js"
+import postgres from "postgres";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { config } from "./config.js"
+
+const client = postgres(config.db.url, { max: 1 });
+await migrate(drizzle(client), config.db.migrations);
 
 const app = express()
 const PORT = 8080
