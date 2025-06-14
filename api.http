@@ -15,5 +15,15 @@ POST http://localhost:8080/api/users
 content-type: application/json
 
 {
-  "email": "test_002@example.com"
+  "email": "test_001@example.com"
+}
+
+### Create chirp
+
+POST http://localhost:8080/api/chirps
+content-type: application/json
+
+{
+  "body": "This is chirp",
+  "userId": "4ad605c6-8295-47f3-98f0-a7487c5df3fa"
 }

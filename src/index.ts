@@ -3,13 +3,14 @@ import { logResponseMiddleware } from "./middleware/logger.js"
 import { metricsMiddleware } from "./middleware/metrics.js"
 import { metrics, reset } from "./handlers/admin.js"
 import { health } from "./handlers/health.js"
-import { chirp } from "./handlers/validation.js"
 import { error } from "./middleware/error.js"
 import postgres from "postgres";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { config } from "./config.js"
-import { store } from "./handlers/users.js"
+import { store as storeUser } from "./handlers/users.js"
+import { store as storeChirp } from "./handlers/chirps.js"
+
 
 const client = postgres(config.db.url, { max: 1 });
 await migrate(drizzle(client), config.db.migrations);
@@ -22,8 +23,8 @@ app.use(logResponseMiddleware)
 app.use("/app", metricsMiddleware, express.static("./src/app"))
 
 app.get("/api/healthz", health)
-app.post("/api/validate_chirp", chirp)
-app.post("/api/users", store)
+app.post("/api/users", storeUser)
+app.post("/api/chirps", storeChirp)
 
 app.get("/admin/metrics", metrics)
 app.post("/admin/reset", reset)

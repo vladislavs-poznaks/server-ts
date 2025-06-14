@@ -8,6 +8,13 @@
       "when": 1749879647161,
       "tag": "0000_violet_gateway",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749892556425,
+      "tag": "0001_thankful_metal_master",
+      "breakpoints": true
     }
   ]
 }
