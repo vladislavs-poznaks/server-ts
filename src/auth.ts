@@ -1,4 +1,10 @@
 import bcrypt from 'bcrypt';
+import { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+import UnauthenticatedError from './errors/UnauthenticatedError';
+
+export type Payload = Pick<JwtPayload, "iss" | "sub" | "iat" | "exp">;
+
 
 export const hashPassword = async (password: string): Promise<string> => {
     const saltRounds = 12
@@ -7,4 +13,27 @@ export const hashPassword = async (password: string): Promise<string> => {
 
 export const checkHashedPassword = async (password: string, hash: string): Promise<boolean> => {
     return await bcrypt.compare(password, hash)
+}
+
+export const createJWT = (userId: string, expiresIn: number, secret: string): string => {
+    const now = Math.floor(Date.now() / 1000)
+
+    const payload: Payload = {
+        iss: "chirpy",
+        sub: userId,
+        iat: now,
+        exp: now + expiresIn
+    }
+
+    return jwt.sign(payload, secret)
+}
+
+export const validateJWT = (token: string, secret: string): string => {
+    try {
+        const payload = jwt.verify(token, secret) as Payload
+
+        return payload.sub || ''
+    } catch (err) {
+        throw new UnauthenticatedError('Invalid token')
+    }
 }
