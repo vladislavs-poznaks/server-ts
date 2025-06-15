@@ -11,13 +11,21 @@ import UnauthorizedError from "../errors/UnauthorizedError.js";
 const profane = ['kerfuffle', 'sharbert', 'fornax']
 
 export const index: HttpHandler = async (req, res) => {
-  let authorId = "";
-  let authorIdQuery = req.query.authorId;
+  let authorId = ""
+  let sortOrder = "asc"
+
+  let authorIdQuery = req.query.authorId
+  let sortOrderQuery = req.query.sort
+
   if (typeof authorIdQuery === "string") {
-    authorId = authorIdQuery;
+    authorId = authorIdQuery
   }
 
-  const chirps = await getChirps(authorId)
+  if (typeof sortOrderQuery === "string" && ['asc', 'desc'].includes(sortOrderQuery)) {
+    sortOrder = sortOrderQuery
+  }
+
+  const chirps = await getChirps(authorId, sortOrder)
 
   jsonResponse(res, chirps)
 }
