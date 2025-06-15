@@ -19,3 +19,7 @@ export const create = async (chirp: Chirp) => {
 
   return result
 }
+
+export const deleteChirpById = async (id: string) => {
+  await db.delete(chirps).where(eq(chirps.id, id))
+}
