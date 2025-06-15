@@ -2,8 +2,10 @@ import { eq } from "drizzle-orm"
 import { db } from "../index.js"
 import { Chirp, chirps } from "../schema.js"
 
-export const getChirps = async () => {
-  const result = await db.select().from(chirps).orderBy(chirps.createdAt)
+export const getChirps = async (authorId?: string) => {
+  const result = db.select().from(chirps)
+    .where(authorId ? eq(chirps.userId, authorId) : undefined)
+    .orderBy(chirps.createdAt)
 
   return result
 }
