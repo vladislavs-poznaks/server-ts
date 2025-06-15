@@ -20,6 +20,12 @@ export const updateUser = async (userId: string, user: User) => {
   return result
 }
 
+export const markAsChirpyRedById = async (userId: string) => {
+  const [result] = await db.update(users).set({isChirpyRed: true}).where(eq(users.id, userId)).returning()
+
+  return result
+}
+
 export const truncate = async () => {
     await db.delete(users)
 }

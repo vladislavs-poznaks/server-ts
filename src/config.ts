@@ -5,6 +5,7 @@ export type APIConfig = {
         accessTokenExpiresInSeconds: number;
         refreshTokenExpiresInSeconds: number;
     };
+    polkaKey: string;
     secret: string;
     platform: string;
     db: DBConfig;
@@ -35,6 +36,7 @@ export const config: APIConfig = {
         accessTokenExpiresInSeconds: 3600,
         refreshTokenExpiresInSeconds: 60 * 3600,
     },
+    polkaKey: envOrFail("POLKA_KEY"),
     secret: envOrFail("JWT_SECRET"),
     platform: envOrFail("PLATFORM"),
     db: {

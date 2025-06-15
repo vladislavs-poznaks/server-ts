@@ -59,5 +59,22 @@ export const getBearerToken = (req: Request): string => {
         throw new UnauthenticatedError('Bearer token not present')
     }
 
-    return token
+    return token 
+}
+
+
+export const getApiKey = (req: Request): string => {
+    const header = req.get('Authorization')
+
+    if (! header) {
+        throw new UnauthenticatedError('API key not present')
+    }
+
+    const [_, key] = header.split(' ')
+
+    if (! key) {
+        throw new UnauthenticatedError('API key not present')
+    }
+
+    return key 
 }

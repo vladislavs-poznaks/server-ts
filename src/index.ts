@@ -11,6 +11,7 @@ import { config } from "./config.js"
 import { store as storeUser, update as updateUser } from "./handlers/users.js"
 import { index as indexChirps, show as showChirp, store as storeChirp, destroy as destroyChirp } from "./handlers/chirps.js"
 import { login, refresh, revoke } from "./handlers/auth.js"
+import { polka } from "./handlers/webhooks.js"
 
 
 const client = postgres(config.db.url, { max: 1 });
@@ -37,6 +38,7 @@ app.get("/api/chirps/:id", showChirp)
 app.post("/api/chirps", storeChirp)
 app.delete("/api/chirps/:id", destroyChirp)
 
+app.post("/api/polka/webhooks", polka)
 
 app.get("/admin/metrics", metrics)
 app.post("/admin/reset", reset)
